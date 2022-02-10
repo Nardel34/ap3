@@ -1,0 +1,29 @@
+{% extends "base.html.twig" %} {% block title %} Création produit {% endblock title %} {% block body %}
+
+<h1>Inscription</h1>
+
+{{form_start(formView)}}
+<div class="row">
+    <div class="col">
+        {{form_row(formView.email)}}
+        <div class="mt-3">{{form_row(formView.password)}}</div>
+        <div class="mt-3">
+            <label>Confirmez le mot de passe</label>
+            <input type="password" name="confirm_password" class="form-control" placeholder="Confirmez le mot de passe">
+        </div>
+        <div class="mt-3">
+            <label for="exampleInputEmail1">Expérience</label>
+            <input type="text" name="exp" class="form-control" placeholder="Entrez votre expérience">
+        </div>
+
+    </div>
+    <div class="col">
+        <label for="exampleInputEmail1">Diplôme</label>
+        <input type="text" name="diplome" class="form-control" placeholder="Entrez votre diplôme">
+        <div class="mt-3">{{form_row(formView.nom)}}</div>
+        <div class="mt-3">{{form_row(formView.prenom)}}</div>
+        <div class="mt-3">{{form_row(formView.age)}}</div>
+    </div>
+</div>
+
+<button type="submit" class="btn btn-primary mt-5"><i class="fas fa-save"></i> S'inscrire</button> {{form_end(formView)}} {% endblock body %}

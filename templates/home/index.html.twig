@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %} {% block title %}Accueil{% endblock %} {% block body %} {% if session %}
+
+<h1>Profil : {{app.user.nom}} {{app.user.prenom}}</h1>
+<h2 class="mt-5">Evènement à venir :</h2>
+<div class="wrap">
+    {% for event in events %}
+
+    <div class="card bg-secondary mb-3 card-me" style="max-width: 20rem;">
+        <div class="card-header">{{event.type.nomtype}}</div>
+        <div class="card-body">
+            <p class="card-text">{{event.dateEvent}}</p>
+            <p class="card-text">{{event.type.description}}</p>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+<a href="" class="btn btn-primary mt-5"><i class="fa-solid fa-plus"></i> Ajouter un évènement</a> {% else %}
+
+<p class="card-text">Veuillez vous connecter</p>
+
+{% endif %} {% endblock %}

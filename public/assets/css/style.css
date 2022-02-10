@@ -1,0 +1,34 @@
+.wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card-me {
+    margin: 20px;
+}
+
+h1 {
+    margin-bottom: 50px !important;
+}
+
+h2 {
+    text-transform: none !important;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    background-color: black;
+    margin-top: 5px;
+}
+
+.block_login {
+    margin: auto;
+    width: 35%;
+}
+
+.typediscrib {
+    font-weight: normal;
+}

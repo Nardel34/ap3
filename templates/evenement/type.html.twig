@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %} {% block title %}Accueil{% endblock %} {% block body %}
+
+<h1>Les Type d'évènements</h1>
+<div class="wrap">
+    {% for type in types %}
+
+    <a href="{{path('eventByType', {'id': type.id})}}" class="btn btn-primary mt-5 card-me">
+        {{type.nomtype}}<br><br>
+        <p class="typediscrib">Description : {{type.description}}</p>
+    </a> {% endfor %}
+</div>
+{% endblock %}

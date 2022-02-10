@@ -1,0 +1,12 @@
+{% extends "base.html.twig" %} {% block title %} Création produit {% endblock title %} {% block body %}
+
+<h1>Créer un évènement</h1>
+
+{{form_start(formView)}}
+<div class="row">
+    <div class="col mt-5">{{form_row(formView.type)}}</div>
+    <div class="col mt-5">{{form_row(formView.dateEvent)}}</div>
+    <div class="col mt-5">{{form_row(formView.lien)}}</div>
+</div>
+
+<button type="submit" class="btn btn-primary mt-5"><i class="fas fa-save"></i> S'inscrire</button> {{form_end(formView)}} {% endblock body %}
