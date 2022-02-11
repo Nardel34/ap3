@@ -14,13 +14,20 @@ class HomeController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(EvenementRepository $evenementRepository): Response
     {
-        if ($this->getUser() != null) {
-            $session = true;
-            $events = $evenementRepository->findBy(['personnes' => $this->getUser()]);
+        if ($this->getUser() !== null) {
+            if ($this->getUser()->getRoles()[0] == "ROLE_PROF") {
+                $session = true;
+                $events = $evenementRepository->findBy(['personnes' => $this->getUser()]);
+            } else if ($this->getUser()->getRoles()[0] == "ROLE_ELEVE") {
+                $session = true;
+                $events = $this->getUser()->getParticipations();
+            }
         } else {
             $session = false;
             $events = null;
         }
+
+
         return $this->render('home/index.html.twig', [
             'events' => $events,
             'session' => $session

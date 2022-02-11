@@ -55,19 +55,25 @@ class EvenementController extends AbstractController
         ]);
     }
     #[Route('/log/type/eleve/{id}/inscription', name: 'inscription')]
-    public function inscription($id, Request $request, EntityManagerInterface $em): Response
+    public function inscription($id, EvenementRepository $evenementRepository, EntityManagerInterface $em): Response
     {
-        $form = $this->createForm(EventType::class, $event);
-        $form->handleRequest($request);
+        $event = $evenementRepository->findOneBy(['id' => $id]);
+        $event->addInscrit($this->getUser());
+        $this->getUser()->addParticipation($event);
+        $em->flush();
 
-        if ($form->isSubmitted()) {
-            $em->flush();
+        return $this->redirectToRoute('home');
+    }
 
-            return $this->redirectToRoute('home');
-        }
+    #[Route('/log/type/professeur/{id}/show-participant', name: 'detail')]
+    public function participants($id, EvenementRepository $evenementRepository, EntityManagerInterface $em): Response
+    {
+        $event = $evenementRepository->findOneBy(['id' => $id]);
+        $participants = $event->getInscrits();
 
-        return $this->render('evenement/create.html.twig', [
-            'formView' => $form->createView()
+        return $this->render('evenement/show_participant.html.twig', [
+            'event' => $event,
+            'participants' => $participants
         ]);
     }
 }

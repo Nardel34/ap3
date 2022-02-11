@@ -29,12 +29,13 @@ class Evenement
     #[ORM\ManyToOne(targetEntity: Personnes::class, inversedBy: 'evenements')]
     private $personnes;
 
-    #[ORM\OneToMany(mappedBy: 'evenement', targetEntity: Personnes::class)]
-    private $inscrits;
+    #[ORM\ManyToMany(targetEntity: Personnes::class, inversedBy: 'participations')]
+    private $Inscrits;
 
     public function __construct()
     {
         $this->inscrits = new ArrayCollection();
+        $this->Inscrits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -95,14 +96,13 @@ class Evenement
      */
     public function getInscrits(): Collection
     {
-        return $this->inscrits;
+        return $this->Inscrits;
     }
 
     public function addInscrit(Personnes $inscrit): self
     {
-        if (!$this->inscrits->contains($inscrit)) {
-            $this->inscrits[] = $inscrit;
-            $inscrit->setEvenement($this);
+        if (!$this->Inscrits->contains($inscrit)) {
+            $this->Inscrits[] = $inscrit;
         }
 
         return $this;
@@ -110,12 +110,7 @@ class Evenement
 
     public function removeInscrit(Personnes $inscrit): self
     {
-        if ($this->inscrits->removeElement($inscrit)) {
-            // set the owning side to null (unless already changed)
-            if ($inscrit->getEvenement() === $this) {
-                $inscrit->setEvenement(null);
-            }
-        }
+        $this->Inscrits->removeElement($inscrit);
 
         return $this;
     }

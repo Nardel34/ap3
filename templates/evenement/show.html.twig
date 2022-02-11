@@ -7,6 +7,8 @@
         <div class="card-header">Le {{event.dateEvent}}</div>
         <div class="card-body">
             <p class="card-text">Animé par {{event.personnes.nom}} {{event.personnes.nom}}</p>
+            {% if app.user.roles[0] == "ROLE_ELEVE" %}
+            <a href="{{path('inscription', {'id':event.id})}}" class="btn btn-success btn-sm mt-5">S'inscrire</a> {% endif %}
         </div>
     </div>
     {% endfor %}
