@@ -30,7 +30,7 @@ class EventType extends AbstractType
                     'placeholder' => "Entrez la date de l'évènement"
                 ]
             ])
-            ->add('lieu', TextType::class, [
+            ->add('lieu', EntityType::class, [
                 'label' => "Adresse de l'évènement",
                 'placeholder' => '-- Choisir une adresse --',
                 'class' => Lieu::class,

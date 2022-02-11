@@ -5,18 +5,18 @@
 <div class="wrap">
     {% for event in events %}
 
-    <div class="card bg-secondary mb-3 card-me" style="max-width: 20rem;">
+    <a href="#" class="card bg-secondary mb-3 card-me" style="max-width: 20rem;">
         <div class="card-header">{{event.type.nomtype}}</div>
         <div class="card-body">
             <p class="card-text">{{event.dateEvent}}</p>
             <p class="card-text">{{event.type.description}}</p>
         </div>
-    </div>
+    </a>
 
     {% endfor %}
 </div>
-<a href="" class="btn btn-primary mt-5"><i class="fa-solid fa-plus"></i> Ajouter un évènement</a> {% else %}
-
+{% if app.user.roles[0] == "ROLE_PROF" %}
+<a href="{{path('create_event')}}" class="btn btn-primary mt-5"><i class="fa-solid fa-plus"></i> Ajouter un évènement</a>{% endif %} {% else %}
 <p class="card-text">Veuillez vous connecter</p>
 
 {% endif %} {% endblock %}

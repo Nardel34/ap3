@@ -50,6 +50,9 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'personnes', targetEntity: Evenement::class)]
     private $evenements;
 
+    #[ORM\ManyToOne(targetEntity: Evenement::class, inversedBy: 'inscrits')]
+    private $evenement;
+
     public function __construct()
     {
         $this->evenements = new ArrayCollection();
@@ -254,6 +257,18 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
                 $evenement->setPersonnes(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEvenement(): ?Evenement
+    {
+        return $this->evenement;
+    }
+
+    public function setEvenement(?Evenement $evenement): self
+    {
+        $this->evenement = $evenement;
 
         return $this;
     }

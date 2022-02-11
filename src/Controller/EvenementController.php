@@ -43,11 +43,30 @@ class EvenementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
+            $event->setPersonnes($this->getUser());
             $em->persist($event);
             $em->flush();
+
+            return $this->redirectToRoute('home');
         }
 
-        return $this->render('evenement/type.html.twig', [
+        return $this->render('evenement/create.html.twig', [
+            'formView' => $form->createView()
+        ]);
+    }
+    #[Route('/log/type/eleve/{id}/inscription', name: 'inscription')]
+    public function inscription($id, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(EventType::class, $event);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $em->flush();
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('evenement/create.html.twig', [
             'formView' => $form->createView()
         ]);
     }

@@ -25,14 +25,6 @@ class SecurityController extends AbstractController
     {
         $form = $this->createForm(LoginType::class, ['email' => $utils->getLastUsername()]);
 
-        if ($form->isSubmitted()) {
-            if ($this->getUser()->getRoles() == [0 => "ROLE_PROF", 1 => "ROLE_USER"]) {
-                return $this->redirectToRoute('index_prof');
-            } else if ($this->getUser()->getRoles() == [0 => "ROLE_ELEVE", 1 => "ROLE_USER"]) {
-                return $this->redirectToRoute('index_eleve');
-            }
-        }
-
         return $this->render('security/login.html.twig', [
             'formView' => $form->createView(),
             'error' => $utils->getLastAuthenticationError()

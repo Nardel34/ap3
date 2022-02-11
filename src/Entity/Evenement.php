@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EvenementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
@@ -26,6 +28,14 @@ class Evenement
 
     #[ORM\ManyToOne(targetEntity: Personnes::class, inversedBy: 'evenements')]
     private $personnes;
+
+    #[ORM\OneToMany(mappedBy: 'evenement', targetEntity: Personnes::class)]
+    private $inscrits;
+
+    public function __construct()
+    {
+        $this->inscrits = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -76,6 +86,36 @@ class Evenement
     public function setPersonnes(?Personnes $personnes): self
     {
         $this->personnes = $personnes;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Personnes[]
+     */
+    public function getInscrits(): Collection
+    {
+        return $this->inscrits;
+    }
+
+    public function addInscrit(Personnes $inscrit): self
+    {
+        if (!$this->inscrits->contains($inscrit)) {
+            $this->inscrits[] = $inscrit;
+            $inscrit->setEvenement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscrit(Personnes $inscrit): self
+    {
+        if ($this->inscrits->removeElement($inscrit)) {
+            // set the owning side to null (unless already changed)
+            if ($inscrit->getEvenement() === $this) {
+                $inscrit->setEvenement(null);
+            }
+        }
 
         return $this;
     }

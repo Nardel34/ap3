@@ -83,7 +83,7 @@ class AppFixtures extends Fixture
             ->setRoles(["ROLE_ELEVE"])
             ->setAge('12')
             ->setDateEntree(date_format(date_create('now'), 'd-m-Y'))
-            ->setTarifs($this->tarifsRepository->findOneBy(['id' => 1]));
+            ->setTarifs($this->tarifsRepository->findOneBy(['id' => 11]));
 
         $manager->persist($eleve);
 
