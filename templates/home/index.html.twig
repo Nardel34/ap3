@@ -3,7 +3,18 @@
 <h1>Profil : {{app.user.nom}} {{app.user.prenom}}</h1>
 <h2 class="mt-5">Evènement à venir :</h2>
 <div class="wrap">
-    {% for event in app.user.evenements %}
+    {% if app.user.roles[0] == "ROLE_PROF" %} {% for event in app.user.evenements %}
+
+    <div class="card bg-secondary mb-3 card-me" style="max-width: 20rem;">
+        <div class="card-header">{{event.type.nomtype}}</div>
+        <div class="card-body">
+            <p class="card-text">{{event.dateEvent|date("d/m/Y")}}</p>
+            <p class="card-text">{{event.type.description}}</p>
+            <a href="{{path('detail', {'id':event.id})}}" class="btn btn-success btn-sm mt-2">Détails</a>
+        </div>
+    </div>
+
+    {% endfor %} {% endif %} {% if app.user.roles[0] == "ROLE_ELEVE" %}{% for event in app.user.Participations %}
 
     <div class="card bg-secondary mb-3 card-me" style="max-width: 20rem;">
         <div class="card-header">{{event.type.nomtype}}</div>
@@ -15,7 +26,7 @@
         </div>
     </div>
 
-    {% endfor %}
+    {% endfor %} {% endif %}
 </div>
 {% if app.user.roles[0] == "ROLE_PROF" %}
 <a href="{{path('create_event')}}" class="btn btn-primary mt-5"><i class="fa-solid fa-plus"></i> Ajouter un évènement</a>{% endif %} {% else %}
