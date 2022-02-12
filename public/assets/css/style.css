@@ -56,7 +56,11 @@ h1::after {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    position: absolute;
+    left: 0;
     bottom: 0;
-    margin-top: 50px;
+}
+
+.form-inline {
+    display: flex;
 }

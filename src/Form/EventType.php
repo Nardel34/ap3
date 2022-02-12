@@ -24,9 +24,7 @@ class EventType extends AbstractType
                     'class' => "form-select"
                 ],
                 'class' => Type::class,
-                'choice_label' =>  function (Type $type) {
-                    return strtoupper($type->getNomType());
-                }
+                'choice_label' =>  'nomType'
             ])
             ->add('dateEvent', DateType::class, [
                 'label' => "Date de l'évènement"
@@ -38,9 +36,7 @@ class EventType extends AbstractType
                     'class' => "form-select"
                 ],
                 'class' => Lieu::class,
-                'choice_label' =>  function (Lieu $lien) {
-                    return strtoupper($lien->getAdresseLieu());
-                }
+                'choice_label' =>  'adresseLieu'
             ]);
     }
 
