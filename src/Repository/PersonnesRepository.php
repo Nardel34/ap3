@@ -36,32 +36,12 @@ class PersonnesRepository extends ServiceEntityRepository implements PasswordUpg
         $this->_em->flush();
     }
 
-    // /**
-    //  * @return Personnes[] Returns an array of Personnes objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findByRole(string $role)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.roles LIKE :role')
+            ->setParameter('role', '%ROLE_' . $role . '%')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Personnes
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

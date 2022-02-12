@@ -1,13 +1,12 @@
-{% extends "base.html.twig" %} {% block title %} Création produit {% endblock title %} {% block body %}
+{% extends "base.html.twig" %} {% block title %} Création évènement {% endblock title %} {% block body %}
 <div class="block_login">
 
     <h1>Créer un évènement</h1>
-
     {{form_start(formView)}}
     <div class="col mt-5">{{form_row(formView.type)}}</div>
     <div class="col mt-5">{{form_row(formView.dateEvent)}}</div>
     <div class="col mt-5">{{form_row(formView.lieu)}}</div>
-
     <button type="submit" class="btn btn-primary mt-5"><i class="fas fa-save"></i> Enregistrer</button> {{form_end(formView)}}
 
-</div> {% endblock body %}
+</div>
+{% endblock body %}

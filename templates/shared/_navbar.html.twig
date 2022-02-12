@@ -13,7 +13,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{path('type')}}">évènements</a>
                 </li>
-                {#
+                {% if app.user and app.user.roles[0] == "ROLE_PROF" %}
+                <li>
+                    <a class="nav-link" href="{{path('reunions')}}">Réunions</a>
+                </li>
+                {% endif %} {#
                 <li class="nav-item">
                     <a class="nav-link" href="#">Pricing</a>
                 </li>

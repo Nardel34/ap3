@@ -15,7 +15,7 @@ class Evenement
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'datetime')]
     private $dateEvent;
 
     #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'evenements')]
@@ -43,15 +43,14 @@ class Evenement
         return $this->id;
     }
 
-    public function getDateEvent(): ?string
+    public function getDateEvent(): ?\DateTimeInterface
     {
         return $this->dateEvent;
     }
 
-    public function setDateEvent(string $dateEvent): self
+    public function setDateEvent(\DateTimeInterface $dateEvent): self
     {
         $this->dateEvent = $dateEvent;
-
         return $this;
     }
 

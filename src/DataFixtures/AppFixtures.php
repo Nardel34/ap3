@@ -10,6 +10,7 @@ use App\Entity\Type;
 use App\Repository\LieuRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\TypeRepository;
+use DateTime;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -73,7 +74,18 @@ class AppFixtures extends Fixture
             ->setDiplome('prof')
             ->setExpPro('profpro');
 
+        $prof2 = new Personnes();
+        $prof2->setEmail('prof2@gmail.com')
+            ->setPassword($this->hasher->hashPassword($prof2, 'aze'))
+            ->setNom('nomprof2')
+            ->setPrenom('prenomprof2')
+            ->setRoles(["ROLE_PROF"])
+            ->setAge('30')
+            ->setDiplome('prof2')
+            ->setExpPro('profpro2');
+
         $manager->persist($prof);
+        $manager->persist($prof2);
 
         $eleve = new Personnes();
         $eleve->setEmail('eleve@gmail.com')
@@ -83,24 +95,24 @@ class AppFixtures extends Fixture
             ->setRoles(["ROLE_ELEVE"])
             ->setAge('12')
             ->setDateEntree(date_format(date_create('now'), 'd-m-Y'))
-            ->setTarifs($this->tarifsRepository->findOneBy(['id' => 13]));
+            ->setTarifs($this->tarifsRepository->findOneBy(['id' => 26]));
 
         $manager->persist($eleve);
 
         $manager->flush();
 
         $event1 = new Evenement;
-        $event1->setDateEvent('20/10/2030')
+        $event1->setDateEvent(new DateTime('now'))
             ->setType($type1)
             ->setLieu($lieu1)
             ->setPersonnes($prof);
         $event2 = new Evenement;
-        $event2->setDateEvent('20/10/2200')
+        $event2->setDateEvent(new DateTime('now'))
             ->setType($type2)
             ->setLieu($lieu2)
             ->setPersonnes($prof);
         $event3 = new Evenement;
-        $event3->setDateEvent('20/10/2130')
+        $event3->setDateEvent(new DateTime('now'))
             ->setType($type3)
             ->setLieu($lieu2)
             ->setPersonnes($prof);

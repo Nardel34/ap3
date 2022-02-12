@@ -53,10 +53,14 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Evenement::class, mappedBy: 'Inscrits')]
     private $participations;
 
+    #[ORM\ManyToMany(targetEntity: Reunion::class, mappedBy: 'professeurs')]
+    private $reunions;
+
     public function __construct()
     {
         $this->evenements = new ArrayCollection();
         $this->participations = new ArrayCollection();
+        $this->reunions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -284,6 +288,33 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->participations->removeElement($participation)) {
             $participation->removeInscrit($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Reunion[]
+     */
+    public function getReunions(): Collection
+    {
+        return $this->reunions;
+    }
+
+    public function addReunion(Reunion $reunion): self
+    {
+        if (!$this->reunions->contains($reunion)) {
+            $this->reunions[] = $reunion;
+            $reunion->addProfesseur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReunion(Reunion $reunion): self
+    {
+        if ($this->reunions->removeElement($reunion)) {
+            $reunion->removeProfesseur($this);
         }
 
         return $this;
