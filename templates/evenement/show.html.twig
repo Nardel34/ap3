@@ -6,7 +6,7 @@
     <div class="card bg-secondary mb-3 card-me" style="max-width: 20rem;">
         <div class="card-header">Le {{event.dateEvent|date("d/m/Y")}}</div>
         <div class="card-body">
-            <p class="card-text">Animé par {{event.personnes.nom}} {{event.personnes.nom}}</p>
+            <p class="card-text">Animé par {{event.personnes.nom}} {{event.personnes.prenom}}</p>
             {% if app.user and app.user.roles[0] == "ROLE_ELEVE" %}
             <a href="{{path('inscription', {'id':event.id})}}" class="btn btn-success btn-sm mt-5">S'inscrire</a> {% endif %}
         </div>

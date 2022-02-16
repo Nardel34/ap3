@@ -76,4 +76,33 @@ class EvenementController extends AbstractController
             'participants' => $participants
         ]);
     }
+
+    #[Route('/log/type/professeur/{id}/edit_event', name: 'edit_event')]
+    public function edit_event($id, EvenementRepository $evenementRepository, EntityManagerInterface $em, Request $request): Response
+    {
+        $selected_event = $evenementRepository->findOneBy(['id' => $id]);
+        $form = $this->createForm(EventType::class, $selected_event);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $em->flush();
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('evenement/edit.html.twig', [
+            'formView' => $form->createView()
+        ]);
+    }
+
+    #[Route('/log/type/professeur/del_event', name: 'del_event')]
+    public function del_event(EvenementRepository $evenementRepository, EntityManagerInterface $em, Request $request): Response
+    {
+        $event = $evenementRepository->findOneBy(['id' => $_POST['event']]);
+        $em->remove($event);
+        $em->flush();
+
+        return $this->redirectToRoute('home');
+    }
 }

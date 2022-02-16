@@ -61,7 +61,7 @@ class Reunion
     public function addProfesseur(Personnes $professeur): self
     {
         if (!$this->professeurs->contains($professeur)) {
-            $this->professeurs[] = $professeur;
+            $this->professeurs->add($professeur);
         }
 
         return $this;

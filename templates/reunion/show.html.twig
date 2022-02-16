@@ -4,7 +4,7 @@
 <div class="wrap">
     {% for reunion in app.user.reunions %}
     <div class="card bg-secondary mb-3 card-me" style="max-width: 20rem;">
-        <div class="card-header">Le {{reunion.date}}</div>
+        <div class="card-header">Le {{reunion.dateReunion|date("d/m/Y")}}</div>
         <div class="card-body">
             {% for s in reunion.sujets %}
             <p class="card-text">Sujet : {{s.sujet}}</p>
@@ -12,6 +12,5 @@
         </div>
     </div>
     {% endfor %}
-    <a href="{{path('create_reunion')}}" class="btn btn-primary mt-5"><i class="fa-solid fa-plus"></i> Ajouter une réunion</a>
 </div>
-{% endblock %}
+<a href="{{path('create_reunion')}}" class="btn btn-primary mt-5"><i class="fa-solid fa-plus"></i> Créer une réunion</a> {% endblock %}

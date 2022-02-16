@@ -76,9 +76,9 @@ class SecurityController extends AbstractController
 
             $user->setDateEntree(date_format(date_create('now'), 'd-m-Y'));
             if ($_POST['tarifchoice'] == "option1") {
-                $user->setTarifs($tarifsRepository->findOneBy(['id' => 7]));
+                $user->setTarifs($tarifsRepository->findOneBy(['Prix' => '500']));
             } else {
-                $user->setTarifs($tarifsRepository->findOneBy(['Id_tarifs' => 8]));
+                $user->setTarifs($tarifsRepository->findOneBy(['Prix' => '1000']));
             }
             if ($_POST['confirm_password'] == $form['password']->getdata()) {
                 $em->persist($user);

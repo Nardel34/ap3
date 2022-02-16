@@ -40,13 +40,13 @@ class AppFixtures extends Fixture
 
         $type1 = new Type;
         $type1->setNomType('Concerto')
-            ->setDescription('petit concert');
+            ->setDescription('Petit concert');
         $type2 = new Type;
-        $type2->setNomType('Solfège')
-            ->setDescription('Lire une partition');
+        $type2->setNomType('Cours de solfège')
+            ->setDescription('Apprender à lire une partition');
         $type3 = new Type;
         $type3->setNomType('Duo avec violoncelle')
-            ->setDescription('Jouer à deux');
+            ->setDescription('Entrainement à la synchronisation');
         $manager->persist($type1);
         $manager->persist($type2);
         $manager->persist($type3);
@@ -67,8 +67,8 @@ class AppFixtures extends Fixture
         $prof = new Personnes();
         $prof->setEmail('prof@gmail.com')
             ->setPassword($this->hasher->hashPassword($prof, 'aze'))
-            ->setNom('nomprof')
-            ->setPrenom('prenomprof')
+            ->setNom('CAROLO')
+            ->setPrenom('Christophe')
             ->setRoles(["ROLE_PROF"])
             ->setAge('30')
             ->setDiplome('prof')
@@ -77,8 +77,8 @@ class AppFixtures extends Fixture
         $prof2 = new Personnes();
         $prof2->setEmail('prof2@gmail.com')
             ->setPassword($this->hasher->hashPassword($prof2, 'aze'))
-            ->setNom('nomprof2')
-            ->setPrenom('prenomprof2')
+            ->setNom('KALLAL')
+            ->setPrenom('Hatem')
             ->setRoles(["ROLE_PROF"])
             ->setAge('30')
             ->setDiplome('prof2')
@@ -90,8 +90,8 @@ class AppFixtures extends Fixture
         $eleve = new Personnes();
         $eleve->setEmail('eleve@gmail.com')
             ->setPassword($this->hasher->hashPassword($eleve, 'aze'))
-            ->setNom('nomeleve')
-            ->setPrenom('prenomeleve')
+            ->setNom('JEUNE')
+            ->setPrenom('Élève')
             ->setRoles(["ROLE_ELEVE"])
             ->setAge('12')
             ->setDateEntree(date_format(date_create('now'), 'd-m-Y'))

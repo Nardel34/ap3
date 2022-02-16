@@ -21,6 +21,10 @@ h2 {
     text-transform: none !important;
 }
 
+h1 {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 h1::after {
     content: '';
     display: block;
@@ -63,4 +67,43 @@ h1::after {
 
 .form-inline {
     display: flex;
+}
+
+.delete {
+    float: right;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.delete:hover {
+    color: red;
+}
+
+.info_nav {
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.size {
+    font-size: 0.8em;
+}
+
+.loadingBar {
+    display: none;
+    height: 5px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    animation: load 1s;
+}
+
+@keyframes load {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
 }

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 class ReunionController extends AbstractController
 {
     #[Route('/professeur/reunion', name: 'reunions')]
@@ -28,8 +29,6 @@ class ReunionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            dd('ok');
-            dd($form['professeurs']->getdata());
             $reunion->addProfesseur($this->getUser());
             $em->persist($reunion);
             $em->flush();
