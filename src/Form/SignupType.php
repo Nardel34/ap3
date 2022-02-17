@@ -19,45 +19,29 @@ class SignupType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'label' => 'Entrez une adresse Email',
-                'attr' => ['placeholder' => "Entrez votre adresse email"]
+                'attr' => ['placeholder' => "Entrez votre adresse email"],
+                'required' => false
             ])
             ->add('password', PasswordType::class, [
                 'label' => 'Entrez un mot de passe',
-                'attr' => ['placeholder' => "Entrez votre mot de passe"]
+                'attr' => ['placeholder' => "Entrez votre mot de passe"],
+                'required' => false
             ])
-            // ->add('roles', ChoiceType::class, [
-            //     'label' => 'Choisissez votre status',
-            //     'choices' => [
-            //         'Professeur' => "ROLE_PROF",
-            //         'Elève' => "ROLE_ELEVE"
-            //     ],
-            //     'expanded' => true,
-            //     'multiple' => false
-            // ])
             ->add('nom', TextType::class, [
                 'label' => 'Entrez votre nom',
-                'attr' => ['placeholder' => "Entrez votre nom"]
+                'attr' => ['placeholder' => "Entrez votre nom"],
+                'required' => false
             ])
             ->add('prenom', TextType::class, [
                 'label' => 'Entrez votre prénom',
-                'attr' => ['placeholder' => "Entrez votre prénom"]
+                'attr' => ['placeholder' => "Entrez votre prénom"],
+                'required' => false
             ])
             ->add('age', TextType::class, [
                 'label' => 'Entrez votre âge',
-                'attr' => ['placeholder' => "Entrez votre âge"]
+                'attr' => ['placeholder' => "Entrez votre âge"],
+                'required' => false
             ]);
-
-        // $builder->get('roles')
-        //     ->addModelTransformer(new CallbackTransformer(
-        //         function ($rolesArray) {
-        //             // transform the array to a string
-        //             return count($rolesArray) ? $rolesArray[0] : null;
-        //         },
-        //         function ($rolesString) {
-        //             // transform the string back to an array
-        //             return [$rolesString];
-        //         }
-        //     ));
     }
 
     public function configureOptions(OptionsResolver $resolver): void

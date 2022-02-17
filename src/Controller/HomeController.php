@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\AbsenceRepository;
 use App\Repository\EvenementRepository;
 use App\Repository\TarifsRepository;
 use App\Repository\TypeRepository;
@@ -12,8 +13,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(EvenementRepository $evenementRepository): Response
+    public function index(EvenementRepository $evenementRepository, AbsenceRepository $absenceRepository): Response
     {
+        absence
+
         return $this->render('home/index.html.twig');
     }
 }

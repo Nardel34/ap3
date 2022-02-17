@@ -99,6 +99,14 @@ h1::after {
     animation: load 1s;
 }
 
+.replace {
+    cursor: pointer;
+}
+
+.replace:hover {
+    color: rgb(12, 95, 12);
+}
+
 @keyframes load {
     0% {
         width: 0%;

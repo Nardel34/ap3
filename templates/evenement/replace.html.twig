@@ -1,0 +1,13 @@
+{% extends "base.html.twig" %} {% block title %} Remplacement {% endblock title %} {% block body %}
+<div class="block_login">
+
+    <h1>Remplacement</h1>
+    {{form_start(formView)}}
+    <div class="col mt-5">{{form_row(formView.personnes)}}</div>
+    <div class="col mt-5" hidden>{{form_row(formView.type)}}</div>
+    <div class="col mt-5" hidden>{{form_row(formView.dateEvent)}}</div>
+    <div class="col mt-5" hidden>{{form_row(formView.lieu)}}</div>
+    <button type="submit" class="btn btn-primary mt-5"><i class="fas fa-save"></i> Enregistrer</button> {{form_end(formView, {'render_rest': false})}}
+
+</div>
+{% endblock body %}

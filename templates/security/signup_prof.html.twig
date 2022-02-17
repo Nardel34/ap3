@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %} {% block title %} Création produit {% endblock title %} {% block body %}
+{% extends "base.html.twig" %} {% block title %} Inscription professeur {% endblock title %} {% block body %}
 
 <h1>Inscription</h1>
 
@@ -8,18 +8,20 @@
         {{form_row(formView.email)}}
         <div class="mt-3">{{form_row(formView.password)}}</div>
         <div class="mt-3">
-            <label>Confirmez le mot de passe</label>
+            <label>Confirmez le mot de passe</label> {% if confException != '' %}
+            <p style="margin-left: 20px; color: rgb(196, 0, 0); font-size: 0.9em"><i class="fas fa-exclamation-circle" style="color: rgb(196, 0, 0);"></i> {{confException}}</p>
+            {% endif %}
             <input type="password" name="confirm_password" class="form-control" placeholder="Confirmez le mot de passe">
         </div>
         <div class="mt-3">
             <label for="exampleInputEmail1">Expérience</label>
-            <input type="text" name="exp" class="form-control" placeholder="Entrez votre expérience">
+            <input type="text" name="exp" class="form-control" placeholder="Entrez votre expérience (Falcultatif)">
         </div>
 
     </div>
     <div class="col">
         <label for="exampleInputEmail1">Diplôme</label>
-        <input type="text" name="diplome" class="form-control" placeholder="Entrez votre diplôme">
+        <input type="text" name="diplome" class="form-control" placeholder="Entrez votre diplôme (Falcultatif)">
         <div class="mt-3">{{form_row(formView.nom)}}</div>
         <div class="mt-3">{{form_row(formView.prenom)}}</div>
         <div class="mt-3">{{form_row(formView.age)}}</div>

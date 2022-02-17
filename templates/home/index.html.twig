@@ -2,11 +2,13 @@
 
 <h1>Tableau de bord</h1>
 <h2 class="mt-5">Évènement à venir :</h2>
+<div class="loadingBar bg-success"></div>
 <div class="wrap">
     {% if app.user.roles[0] == "ROLE_PROF" %} {% for event in app.user.evenements %}
-    <div class="loadingBar bg-success"></div>
     <div class="card bg-secondary mb-3 card-me" style="max-width: 20rem;" id="card{{event.id}}">
-        <div class="card-header">{{event.type.nomtype}} <i class="fa-solid fa-xmark delete" onclick="deleteEvent('{{event.id}}');"></i></i>
+        <div class="card-header">{{event.type.nomtype}}
+            <i class="fa-solid fa-xmark delete" onclick="deleteEvent('{{event.id}}');"></i>
+            <a href="{{path('remplacement', {'id': event.id})}}"><i class="fa-solid fa-user-xmark replace"></i></a>
         </div>
         <div class="card-body">
             <p class="card-text">{{event.type.description}}</p>
@@ -21,14 +23,14 @@
 
     {% endfor %} {% endif %} {% if app.user.roles[0] == "ROLE_ELEVE" %}{% for event in app.user.Participations %}
 
-    <div class="card bg-secondary mb-3 card-me" style="max-width: 20rem;">
-        <div class="card-header">{{event.type.nomtype}}</div>
+    <div class="card bg-secondary mb-3 card-me" style="max-width: 20rem;" id="card{{event.id}}">
+        <div class="card-header">{{event.type.nomtype}}
+            <i class="fa-solid fa-xmark delete" onclick="absence('{{event.id}}');"></i>
+        </div>
         <div class="card-body">
             <p class="card-text">{{event.type.description}}</p>
             <p class="card-text">Adresse : {{event.lieu.adresseLieu}}</p>
             <p class="card-text size">Le {{event.dateEvent|date("d/m/Y")}}</p>
-            {% if app.user.roles[0] == "ROLE_PROF" %}
-            <a href="{{path('detail', {'id':event.id})}}" class="btn btn-success btn-sm mt-2">Détails</a> {% endif %}
         </div>
     </div>
 

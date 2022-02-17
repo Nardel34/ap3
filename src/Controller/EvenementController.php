@@ -1,16 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use App\Entity\Evenement;
+use App\Entity\Absence;
 use App\Form\EventType;
-use App\Repository\EvenementRepository;
+use App\Entity\Evenement;
+use App\Entity\Inscription;
 use App\Repository\TypeRepository;
+use App\Repository\EvenementRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class EvenementController extends AbstractController
 {
@@ -38,11 +42,11 @@ class EvenementController extends AbstractController
     #[Route('/log/type/professeur/createevent', name: 'create_event')]
     public function create(TypeRepository $typeRepository, Request $request, EntityManagerInterface $em): Response
     {
-        $event = new Evenement;
+        $event = new Evenement();
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $event->setPersonnes($this->getUser());
             $em->persist($event);
             $em->flush();
@@ -58,8 +62,9 @@ class EvenementController extends AbstractController
     public function inscription($id, EvenementRepository $evenementRepository, EntityManagerInterface $em): Response
     {
         $event = $evenementRepository->findOneBy(['id' => $id]);
-        $event->addInscrit($this->getUser());
-        $this->getUser()->addParticipation($event);
+        $inscription = new Inscription();
+
+
         $em->flush();
 
         return $this->redirectToRoute('home');
@@ -69,7 +74,7 @@ class EvenementController extends AbstractController
     public function participants($id, EvenementRepository $evenementRepository, EntityManagerInterface $em): Response
     {
         $event = $evenementRepository->findOneBy(['id' => $id]);
-        $participants = $event->getInscrits();
+        $participants = $event->getInscriptions();
 
         return $this->render('evenement/show_participant.html.twig', [
             'event' => $event,
@@ -104,5 +109,33 @@ class EvenementController extends AbstractController
         $em->flush();
 
         return $this->redirectToRoute('home');
+    }
+
+    #[Route('/log/type/professeur/absence', name: 'absence')]
+    public function absence(EvenementRepository $evenementRepository, EntityManagerInterface $em, Request $request): Response
+    {
+        $event = $evenementRepository->findOneBy(['id' => $_POST['event']]);
+        $this->getUser()->removeInscription($event);
+
+        $em->flush();
+
+        return $this->redirectToRoute('home');
+    }
+
+    #[Route('/log/type/professeur/{id}/remplacement', name: 'remplacement')]
+    public function remplacement($id, EvenementRepository $evenementRepository, EntityManagerInterface $em, Request $request): Response
+    {
+        $selected_event = $evenementRepository->findOneBy(['id' => $id]);
+        $form = $this->createForm(EventType::class, $selected_event)->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $em->flush();
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('evenement/replace.html.twig', [
+            'formView' => $form->createView()
+        ]);
     }
 }

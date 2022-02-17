@@ -43,25 +43,29 @@ class SecurityController extends AbstractController
         $form = $this->createForm(SignupType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        $confException = '';
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword($hasher->hashPassword($user, $user->getPassword()));
             $user->setRoles(["ROLE_PROF"])
                 ->setExpPro($_POST['exp'])
                 ->setDiplome($_POST['diplome']);
-            $em->persist($user);
-            $em->flush();
 
             if ($_POST['confirm_password'] == $form['password']->getdata()) {
                 $em->persist($user);
                 $em->flush();
                 return $this->redirectToRoute('security_login');
+            } else {
+                $confException = 'Les 2 mot de passe ne corresponde pas';
             }
         }
 
         return $this->render('security/signup_prof.html.twig', [
-            'formView' => $form->createView()
+            'formView' => $form->createView(),
+            'confException' => $confException
         ]);
     }
+
     #[Route('/signup_eleve', name: 'security_signup_eleve')]
     public function Signup_eleve(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $em, TarifsRepository $tarifsRepository)
     {
@@ -69,26 +73,45 @@ class SecurityController extends AbstractController
         $form = $this->createForm(SignupType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        $confException = '';
+        $tarifException = '';
+
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $user->setPassword($hasher->hashPassword($user, $user->getPassword()));
             $user->setRoles(["ROLE_ELEVE"]);
 
             $user->setDateEntree(date_format(date_create('now'), 'd-m-Y'));
+
             if ($_POST['tarifchoice'] == "option1") {
                 $user->setTarifs($tarifsRepository->findOneBy(['Prix' => '500']));
-            } else {
+
+                if ($_POST['confirm_password'] == $form['password']->getdata()) {
+                    $em->persist($user);
+                    $em->flush();
+                    return $this->redirectToRoute('security_login');
+                } else {
+                    $confException = 'Les 2 mot de passe ne corresponde pas';
+                }
+            } else if ($_POST['tarifchoice'] == "option2") {
                 $user->setTarifs($tarifsRepository->findOneBy(['Prix' => '1000']));
-            }
-            if ($_POST['confirm_password'] == $form['password']->getdata()) {
-                $em->persist($user);
-                $em->flush();
-                return $this->redirectToRoute('security_login');
+
+                if ($_POST['confirm_password'] == $form['password']->getdata()) {
+                    $em->persist($user);
+                    $em->flush();
+                    return $this->redirectToRoute('security_login');
+                } else {
+                    $confException = 'Les 2 mot de passe ne corresponde pas';
+                }
+            } else {
+                $tarifException = 'Veuillez choisir un abonnement';
             }
         }
 
         return $this->render('security/signup_eleve.html.twig', [
-            'formView' => $form->createView()
+            'formView' => $form->createView(),
+            'confException' => $confException,
+            'tarifException' => $tarifException
         ]);
     }
 }

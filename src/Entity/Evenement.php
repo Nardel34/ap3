@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\EvenementRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
@@ -13,29 +17,32 @@ class Evenement
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'datetime')]
-    private $dateEvent;
+    #[Assert\NotBlank(message: "Veuillez entrer une date")]
+    private ?DateTime $dateEvent;
 
     #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'evenements')]
     #[ORM\JoinColumn(nullable: false)]
-    private $type;
+    #[Assert\NotBlank(message: "Veuillez entrer un type")]
+    private ?Type $type;
 
     #[ORM\ManyToOne(targetEntity: Lieu::class, inversedBy: 'evenements')]
     #[ORM\JoinColumn(nullable: false)]
-    private $lieu;
+    #[Assert\NotBlank(message: "Veuillez entrer un lieu")]
+    private ?Lieu $lieu;
 
     #[ORM\ManyToOne(targetEntity: Personnes::class, inversedBy: 'evenements')]
-    private $personnes;
+    #[Assert\NotBlank(message: "Veuillez choisir un remplacant ou annuler")]
+    private ?Personnes $personnes;
 
-    #[ORM\ManyToMany(targetEntity: Personnes::class, inversedBy: 'participations')]
-    private $Inscrits;
+    #[ORM\OneToMany(mappedBy: 'evenements', targetEntity: Inscription::class)]
+    private $inscriptions;
 
     public function __construct()
     {
-        $this->inscrits = new ArrayCollection();
-        $this->Inscrits = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -91,25 +98,31 @@ class Evenement
     }
 
     /**
-     * @return Collection|Personnes[]
+     * @return Collection|Inscription[]
      */
-    public function getInscrits(): Collection
+    public function getInscriptions(): Collection
     {
-        return $this->Inscrits;
+        return $this->inscriptions;
     }
 
-    public function addInscrit(Personnes $inscrit): self
+    public function addInscription(Inscription $inscription): self
     {
-        if (!$this->Inscrits->contains($inscrit)) {
-            $this->Inscrits[] = $inscrit;
+        if (!$this->inscriptions->contains($inscription)) {
+            $this->inscriptions[] = $inscription;
+            $inscription->setEvenements($this);
         }
 
         return $this;
     }
 
-    public function removeInscrit(Personnes $inscrit): self
+    public function removeInscription(Inscription $inscription): self
     {
-        $this->Inscrits->removeElement($inscrit);
+        if ($this->inscriptions->removeElement($inscription)) {
+            // set the owning side to null (unless already changed)
+            if ($inscription->getEvenements() === $this) {
+                $inscription->setEvenements(null);
+            }
+        }
 
         return $this;
     }

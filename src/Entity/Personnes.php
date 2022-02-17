@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\PersonnesRepository;
@@ -8,59 +10,75 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints as Assert_doctrine;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[Assert_doctrine\UniqueEntity('email', message: "L'adresse Email est déjà utilisée")]
 #[ORM\Entity(repositoryClass: PersonnesRepository::class)]
 class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private $email;
+    #[Assert\NotBlank(message: "Veuillez entrer une adresse Email")]
+    private ?string $email;
 
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    private ?array $roles = [];
 
     #[ORM\Column(type: 'string')]
-    private $password;
+    #[Assert\NotBlank(message: "Veuillez entrer un mot de passe")]
+    private ?string $password;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $nom;
+    #[Assert\NotBlank(message: "Veuillez entrer un nom")]
+    private ?string $nom;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $prenom;
+    #[Assert\NotBlank(message: "Veuillez entrer un prénom")]
+    private ?string $prenom;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $age;
+    #[Assert\NotBlank(message: "Veuillez entrer votre âge")]
+    private ?string $age;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $DateEntree;
+    private ?string $DateEntree;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $diplome;
+    // #[Assert\NotBlank(message: "Veuillez entrer un diplôme")]
+    private ?string $diplome;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $expPro;
+    // #[Assert\NotBlank(message: "Veuillez entrer une expérience professionel")]
+    private ?string $expPro;
 
     #[ORM\ManyToOne(targetEntity: Tarifs::class, inversedBy: 'personnes')]
-    private $tarifs;
+    private ?Tarifs $tarifs;
 
     #[ORM\OneToMany(mappedBy: 'personnes', targetEntity: Evenement::class)]
-    private $evenements;
-
-    #[ORM\ManyToMany(targetEntity: Evenement::class, mappedBy: 'Inscrits')]
-    private $participations;
+    private Collection $evenements;
 
     #[ORM\ManyToMany(targetEntity: Reunion::class, mappedBy: 'professeurs')]
-    private $reunions;
+    private Collection $reunions;
+
+    #[ORM\OneToMany(mappedBy: 'eleves', targetEntity: Inscription::class)]
+    private $inscriptions;
+
+    public function __toString(): string
+    {
+        return  strtoupper($this->getNom()) . ' ' . $this->getPrenom();
+    }
 
     public function __construct()
     {
         $this->evenements = new ArrayCollection();
         $this->participations = new ArrayCollection();
         $this->reunions = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -267,33 +285,6 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Evenement[]
-     */
-    public function getParticipations(): Collection
-    {
-        return $this->participations;
-    }
-
-    public function addParticipation(Evenement $participation): self
-    {
-        if (!$this->participations->contains($participation)) {
-            $this->participations[] = $participation;
-            $participation->addInscrit($this);
-        }
-
-        return $this;
-    }
-
-    public function removeParticipation(Evenement $participation): self
-    {
-        if ($this->participations->removeElement($participation)) {
-            $participation->removeInscrit($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Reunion[]
      */
     public function getReunions(): Collection
@@ -315,6 +306,48 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->reunions->removeElement($reunion)) {
             $reunion->removeProfesseur($this);
+        }
+
+        return $this;
+    }
+
+    public function getAbsence(): ?Absence
+    {
+        return $this->absence;
+    }
+
+    public function setAbsence(?Absence $absence): self
+    {
+        $this->absence = $absence;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Inscription[]
+     */
+    public function getInscriptions(): Collection
+    {
+        return $this->inscriptions;
+    }
+
+    public function addInscription(Inscription $inscription): self
+    {
+        if (!$this->inscriptions->contains($inscription)) {
+            $this->inscriptions[] = $inscription;
+            $inscription->setEleves($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscription(Inscription $inscription): self
+    {
+        if ($this->inscriptions->removeElement($inscription)) {
+            // set the owning side to null (unless already changed)
+            if ($inscription->getEleves() === $this) {
+                $inscription->setEleves(null);
+            }
         }
 
         return $this;
