@@ -2,13 +2,28 @@
 
 <h2>Participants pour le {{event.type.nomtype}} du {{event.dateEvent|date("d/m/Y")}}</h2>
 <div class="wrap">
-    {% for participant in participants %}
+    {% for inscrit in inscriptions %} {% if inscrit.absence == 0 %}
+
     <div class="card bg-secondary mb-3 card-me" style="max-width: 20rem;">
-        <div class="card-header">{{participant.nom}} {{participant.prenom}}</div>
+        <div class="card-header">{{inscrit.eleves.nom}} {{inscrit.eleves.prenom}}</div>
         <div class="card-body">
-            <p class="card-text">{{participant.email}}</p>
+            <p class="card-text">{{inscrit.eleves.email}}</p>
         </div>
     </div>
-    {% endfor %}
+    {% endif %} {% endfor %}
+</div>
+
+<br><br>
+<h2 class="">Elèves Absents</h2>
+<div class="wrap">
+
+    {% for inscrit in inscriptions %} {% if inscrit.absence == 1 %}
+    <div class="card bg-secondary mb-3 card-me" style="max-width: 20rem;">
+        <div class="card-header">{{inscrit.eleves.nom}} {{inscrit.eleves.prenom}}</div>
+        <div class="card-body">
+            <p class="card-text">{{inscrit.eleves.email}}</p>
+        </div>
+    </div>
+    {% endif %} {% endfor %}
 </div>
 {% endblock %}

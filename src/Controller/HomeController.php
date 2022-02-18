@@ -13,10 +13,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(EvenementRepository $evenementRepository, AbsenceRepository $absenceRepository): Response
+    public function index(EvenementRepository $evenementRepository): Response
     {
-        absence
-
         return $this->render('home/index.html.twig');
     }
 }

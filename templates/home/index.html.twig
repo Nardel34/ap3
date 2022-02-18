@@ -21,20 +21,20 @@
         </div>
     </div>
 
-    {% endfor %} {% endif %} {% if app.user.roles[0] == "ROLE_ELEVE" %}{% for event in app.user.Participations %}
+    {% endfor %} {% endif %} {% if app.user.roles[0] == "ROLE_ELEVE" %}{% for inscription in app.user.Inscriptions %} {% if inscription.Absence == 0 %}
 
-    <div class="card bg-secondary mb-3 card-me" style="max-width: 20rem;" id="card{{event.id}}">
-        <div class="card-header">{{event.type.nomtype}}
-            <i class="fa-solid fa-xmark delete" onclick="absence('{{event.id}}');"></i>
+    <div class="card bg-secondary mb-3 card-me" style="max-width: 20rem;" id="card{{inscription.evenements.id}}">
+        <div class="card-header">{{inscription.evenements.type.nomtype}}
+            <i class="fa-solid fa-xmark delete" onclick="absence('{{inscription.evenements.id}}');"></i>
         </div>
         <div class="card-body">
-            <p class="card-text">{{event.type.description}}</p>
-            <p class="card-text">Adresse : {{event.lieu.adresseLieu}}</p>
-            <p class="card-text size">Le {{event.dateEvent|date("d/m/Y")}}</p>
+            <p class="card-text">{{inscription.evenements.type.description}}</p>
+            <p class="card-text">Adresse : {{inscription.evenements.lieu.adresseLieu}}</p>
+            <p class="card-text size">Le {{inscription.evenements.dateEvent|date("d/m/Y")}}</p>
         </div>
     </div>
 
-    {% endfor %} {% endif %}
+    {% endif %} {% endfor %} {% endif %}
 </div>
 {% if app.user.roles[0] == "ROLE_PROF" %}
 <a href="{{path('create_event')}}" class="btn btn-primary mt-5 mb-5"><i class="fa-solid fa-plus"></i> Créer un évènement</a>{% endif %} {% else %}

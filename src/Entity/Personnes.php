@@ -311,18 +311,6 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAbsence(): ?Absence
-    {
-        return $this->absence;
-    }
-
-    public function setAbsence(?Absence $absence): self
-    {
-        $this->absence = $absence;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Inscription[]
      */

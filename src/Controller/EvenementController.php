@@ -10,6 +10,7 @@ use App\Entity\Evenement;
 use App\Entity\Inscription;
 use App\Repository\TypeRepository;
 use App\Repository\EvenementRepository;
+use App\Repository\InscriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,23 +63,28 @@ class EvenementController extends AbstractController
     public function inscription($id, EvenementRepository $evenementRepository, EntityManagerInterface $em): Response
     {
         $event = $evenementRepository->findOneBy(['id' => $id]);
+
         $inscription = new Inscription();
+        $inscription->setEleves($this->getUser());
+        $inscription->setEvenements($event);
+        $inscription->setAbsence(false);
 
-
+        $em->persist($inscription);
         $em->flush();
 
         return $this->redirectToRoute('home');
     }
 
     #[Route('/log/type/professeur/{id}/show-participant', name: 'detail')]
-    public function participants($id, EvenementRepository $evenementRepository, EntityManagerInterface $em): Response
+    public function participants($id, EvenementRepository $evenementRepository, InscriptionRepository $inscriptionRepository, EntityManagerInterface $em): Response
     {
         $event = $evenementRepository->findOneBy(['id' => $id]);
-        $participants = $event->getInscriptions();
+        $inscriptions = $inscriptionRepository->findBy(['evenements' => $event]);
+        $absents = $inscriptionRepository->findBy(['Absence' => 1]);
 
         return $this->render('evenement/show_participant.html.twig', [
             'event' => $event,
-            'participants' => $participants
+            'inscriptions' => $inscriptions
         ]);
     }
 
@@ -112,10 +118,12 @@ class EvenementController extends AbstractController
     }
 
     #[Route('/log/type/professeur/absence', name: 'absence')]
-    public function absence(EvenementRepository $evenementRepository, EntityManagerInterface $em, Request $request): Response
+    public function absence(EvenementRepository $evenementRepository, InscriptionRepository $inscriptionRepository, EntityManagerInterface $em, Request $request): Response
     {
-        $event = $evenementRepository->findOneBy(['id' => $_POST['event']]);
-        $this->getUser()->removeInscription($event);
+        $event = $evenementRepository->findOneBy(['id' => $_POST['id']]);
+        $inscription = $inscriptionRepository->findOneBy(['evenements' => $event]);
+
+        $inscription->setAbsence(true);
 
         $em->flush();
 
