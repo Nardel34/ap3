@@ -28,7 +28,7 @@ class EventType extends AbstractType
                 'attr' => [
                     'class' => "form-select"
                 ],
-                'choices' => $this->pr->findByRole('PROF'),
+                'choices' => $this->pr->findByRole('PROF', $options['user']),
                 'class' => Personnes::class,
                 'required' => false
             ])
@@ -59,8 +59,10 @@ class EventType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => Evenement::class,
-        ]);
+        $resolver
+            ->setDefaults([
+                'data_class' => Evenement::class,
+            ])
+            ->setRequired(['user']);
     }
 }

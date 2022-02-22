@@ -5,12 +5,9 @@
     {{form_start(formView)}}
     <div class="col mt-5">{{form_row(formView.objet)}}</div>
     <div class="col mt-5 mb-5">{{form_row(formView.dateReunion)}}</div>
-    {{form_label(formView.professeurs)}}
-    <div id="newProf" data-prototype='<div class="col mb-3 d-flex">
-{{ form_widget(formView.professeurs.vars.prototype.personnes) }}<button type="button" class="btn btn-danger" onclick="this.parentNode.remove();"><i class="fas fa-trash-alt"></i></button></div>'></div>
-    <div id="fieldset">
-    </div>
-    <div class="col"><button type="button" class="btn btn-success btn-sm mb-3" onclick="addProf();">Ajouter</button></div>
+    <div class="col mt-5 mb-5">{{form_row(formView.professeurs)}}</div>
+    {#
+    <div class="col"><button type="button" class="btn btn-success btn-sm mb-3" onclick="addProf();">Ajouter</button></div> #}
     <button type="submit" class="btn btn-primary mt-5 mb-5"><i class="fas fa-save"></i> Enregistrer</button> {{form_end(formView, {'render_rest': false})}}
 
 </div>

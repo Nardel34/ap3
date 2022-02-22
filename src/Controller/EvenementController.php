@@ -44,7 +44,7 @@ class EvenementController extends AbstractController
     public function create(TypeRepository $typeRepository, Request $request, EntityManagerInterface $em): Response
     {
         $event = new Evenement();
-        $form = $this->createForm(EventType::class, $event);
+        $form = $this->createForm(EventType::class, $event, ['user' => $this->getUser()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -134,7 +134,7 @@ class EvenementController extends AbstractController
     public function remplacement($id, EvenementRepository $evenementRepository, EntityManagerInterface $em, Request $request): Response
     {
         $selected_event = $evenementRepository->findOneBy(['id' => $id]);
-        $form = $this->createForm(EventType::class, $selected_event)->handleRequest($request);
+        $form = $this->createForm(EventType::class, $selected_event, ['user' => $this->getUser()])->handleRequest($request);
 
         if ($form->isSubmitted()) {
             $em->flush();

@@ -25,17 +25,28 @@ class ReunionController extends AbstractController
     public function create_reunion(Request $request, EntityManagerInterface $em): Response
     {
         $reunion = new Reunion;
-        $form = $this->createForm(ReunionType::class, $reunion);
-        $form->handleRequest($request);
+        $form = $this->createForm(ReunionType::class, $reunion, ['user' => $this->getUser()])->handleRequest($request);
 
         if ($form->isSubmitted()) {
             $reunion->addProfesseur($this->getUser());
             $em->persist($reunion);
             $em->flush();
+
+            return $this->redirectToRoute('reunions');
         }
 
         return $this->render('reunion/create.html.twig', [
             'formView' => $form->createView()
         ]);
+    }
+
+    #[Route('/log/type/professeur/del_reunion', name: 'del_reunion')]
+    public function del_event(ReunionRepository $reunionRepository, EntityManagerInterface $em, Request $request): Response
+    {
+        $reunion = $reunionRepository->findOneBy(['id' => $_POST['reunion']]);
+        $em->remove($reunion);
+        $em->flush();
+
+        return $this->redirectToRoute('reunions');
     }
 }

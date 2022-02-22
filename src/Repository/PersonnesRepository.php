@@ -36,10 +36,12 @@ class PersonnesRepository extends ServiceEntityRepository implements PasswordUpg
         $this->_em->flush();
     }
 
-    public function findByRole(string $role)
+    public function findByRole(string $role, $id)
     {
         return $this->createQueryBuilder('u')
+            ->Where('u.id <> :id')
             ->andWhere('u.roles LIKE :role')
+            ->setParameter('id', $id)
             ->setParameter('role', '%ROLE_' . $role . '%')
             ->getQuery()
             ->getResult();
