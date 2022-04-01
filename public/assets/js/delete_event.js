@@ -3,7 +3,7 @@ function deleteEvent(e) {
     if (e !== "") {
         $('.loadingBar').css('display', 'block');
         $.ajax({
-            type: 'POST',
+            type: 'GET',
             url: '/log/type/professeur/del_event',
             data: 'event=' + e,
 

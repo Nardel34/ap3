@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\InscriptionRepository;
@@ -11,16 +13,17 @@ class Inscription
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\ManyToOne(targetEntity: Personnes::class, inversedBy: 'inscriptions')]
-    private $eleves;
+    private ?Personnes $eleves;
 
     #[ORM\ManyToOne(targetEntity: Evenement::class, inversedBy: 'inscriptions')]
-    private $evenements;
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private ?Evenement $evenements;
 
     #[ORM\Column(type: 'boolean')]
-    private $Absence;
+    private ?bool $Absence;
 
     public function getId(): ?int
     {

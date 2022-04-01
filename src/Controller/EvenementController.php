@@ -110,7 +110,7 @@ class EvenementController extends AbstractController
     #[Route('/log/type/professeur/del_event', name: 'del_event')]
     public function del_event(EvenementRepository $evenementRepository, EntityManagerInterface $em, Request $request): Response
     {
-        $event = $evenementRepository->findOneBy(['id' => $_POST['event']]);
+        $event = $evenementRepository->findOneBy(['id' => $_GET['event']]);
         $em->remove($event);
         $em->flush();
 
