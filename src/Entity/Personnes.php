@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Action\NotFoundAction;
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\MeController;
 use App\Repository\PersonnesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,37 +15,60 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints as Assert_doctrine;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[Assert_doctrine\UniqueEntity('email', message: "L'adresse Email est déjà utilisée")]
 #[ORM\Entity(repositoryClass: PersonnesRepository::class)]
+#[ApiResource(
+    collectionOperations: [
+        'me' => [
+            'path' => '/me',
+            'method' => 'get',
+            'controller' => MeController::class,
+        ],
+        'create' => [
+            'path' => '/create',
+            'method' => 'post',
+        ],
+    ],
+    normalizationContext: ['groups' => ['read:User']],
+    denormalizationContext: ['groups' => ['write:User']]
+)]
 class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['read:User'])]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Assert\NotBlank(message: "Veuillez entrer une adresse Email")]
+    #[Groups(['read:User', 'write:User'])]
     private ?string $email;
 
     #[ORM\Column(type: 'json')]
+    #[Groups(['read:User', 'write:User'])]
     private ?array $roles = [];
 
     #[ORM\Column(type: 'string')]
     #[Assert\NotBlank(message: "Veuillez entrer un mot de passe")]
+    #[Groups(['write:User'])]
     private ?string $password;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank(message: "Veuillez entrer un nom")]
+    #[Groups(['read:User', 'write:User'])]
     private ?string $nom;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank(message: "Veuillez entrer un prénom")]
+    #[Groups(['read:User', 'write:User'])]
     private ?string $prenom;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank(message: "Veuillez entrer votre âge")]
+    #[Groups(['write:User'])]
     private ?string $age;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -50,13 +76,16 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     // #[Assert\NotBlank(message: "Veuillez entrer un diplôme")]
+    #[Groups(['write:User'])]
     private ?string $diplome;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     // #[Assert\NotBlank(message: "Veuillez entrer une expérience professionel")]
+    #[Groups(['write:User'])]
     private ?string $expPro;
 
     #[ORM\ManyToOne(targetEntity: Tarifs::class, inversedBy: 'personnes')]
+    #[Groups(['write:User'])]
     private ?Tarifs $tarifs;
 
     #[ORM\OneToMany(mappedBy: 'personnes', targetEntity: Evenement::class)]

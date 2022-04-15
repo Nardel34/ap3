@@ -10,6 +10,7 @@ use App\Entity\Professeur;
 use App\Form\SignupProfType;
 use App\Repository\TarifsRepository;
 use DateTime;
+use Doctrine\DBAL\Types\JsonType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Validator\Constraints\Json;
 
 class SecurityController extends AbstractController
 {
@@ -28,6 +30,19 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', [
             'formView' => $form->createView(),
             'error' => $utils->getLastAuthenticationError()
+        ]);
+    }
+
+    #[Route('/api/login', name: 'api_login', methods: ['POST'])]
+    public function apiLogin()
+    {
+        $user = $this->getUser();
+
+        return $this->json([
+            'email' => $user->getEmail(),
+            'nom' => $user->getNom(),
+            'prenom' => $user->getPrenom(),
+            'roles' => $user->getRoles()
         ]);
     }
 
