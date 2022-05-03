@@ -8,6 +8,7 @@ use App\Form\SignupType;
 use App\Entity\Personnes;
 use App\Entity\Professeur;
 use App\Form\SignupProfType;
+use App\Repository\PersonnesRepository;
 use App\Repository\TarifsRepository;
 use DateTime;
 use Doctrine\DBAL\Types\JsonType;
@@ -33,17 +34,27 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/api/login', name: 'api_login', methods: ['POST'])]
-    public function apiLogin()
+    #[Route('/api/login', name: 'api_login', methods: ['POST', 'GET'])]
+    public function apiLogin(PersonnesRepository $personnesRepository, UserPasswordHasherInterface $hasher)
     {
-        $user = $this->getUser();
+        if (!empty($_POST['email']) && !empty($_POST['password'])) {
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-        return $this->json([
-            'email' => $user->getEmail(),
-            'nom' => $user->getNom(),
-            'prenom' => $user->getPrenom(),
-            'roles' => $user->getRoles()
-        ]);
+                $userFind = $personnesRepository->findOneBy(['email' => $email]);
+
+                if ($hasher->isPasswordValid($userFind, $password)) {
+                    return $this->json([
+                        'id' => $userFind->getId(),
+                        'email' => $userFind->getEmail(),
+                        'nom' => $userFind->getNom(),
+                        'prenom' => $userFind->getPrenom(),
+                        'roles' => $userFind->getRoles()
+                    ]);
+                }
+            }
+        }
     }
 
     #[Route('/logout', name: 'security_logout')]

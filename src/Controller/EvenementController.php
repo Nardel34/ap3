@@ -40,6 +40,27 @@ class EvenementController extends AbstractController
         ]);
     }
 
+    #[Route('/api/eventuser/{id}', name: 'eventuserapi')]
+    public function eventuserapi($id, EvenementRepository $evenementRepository)
+    {
+        $eventfind = $evenementRepository->findBy(['personnes' => $id]);
+
+        $events = [];
+
+        foreach ($eventfind as $item) {
+            $false_entity = [];
+            $false_entity['type'] = $item->getType()->getNomType();
+            $false_entity['lieu'] = $item->getLieu()->getAdresseLieu();
+            $false_entity['date'] = date_format($item->getDateEvent(), "d/m/Y");
+
+            array_push($events, $false_entity);
+        }
+
+        return $this->json([
+            'events' => $events
+        ]);
+    }
+
     #[Route('/log/type/professeur/createevent', name: 'create_event')]
     public function create(TypeRepository $typeRepository, Request $request, EntityManagerInterface $em): Response
     {
@@ -47,8 +68,9 @@ class EvenementController extends AbstractController
         $form = $this->createForm(EventType::class, $event, ['user' => $this->getUser()]);
         $form->handleRequest($request);
 
+        $event->setPersonnes($this->getUser());
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $event->setPersonnes($this->getUser());
             $em->persist($event);
             $em->flush();
 

@@ -22,6 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     collectionOperations: [
         'me' => [
+            'pagination_enabled' => false,
             'path' => '/me',
             'method' => 'get',
             'controller' => MeController::class,
@@ -48,7 +49,7 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email;
 
     #[ORM\Column(type: 'json')]
-    #[Groups(['read:User', 'write:User'])]
+    #[Groups(['read:User'])]
     private ?array $roles = [];
 
     #[ORM\Column(type: 'string')]
@@ -72,6 +73,7 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $age;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['write:User'])]
     private ?string $DateEntree;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -85,7 +87,6 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $expPro;
 
     #[ORM\ManyToOne(targetEntity: Tarifs::class, inversedBy: 'personnes')]
-    #[Groups(['write:User'])]
     private ?Tarifs $tarifs;
 
     #[ORM\OneToMany(mappedBy: 'personnes', targetEntity: Evenement::class)]
@@ -172,7 +173,7 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(string $password, UserPasswordHasherInterface $hasher): self
     {
         $this->password = $password;
 

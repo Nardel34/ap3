@@ -36,7 +36,7 @@ class Evenement
     private ?Lieu $lieu;
 
     #[ORM\ManyToOne(targetEntity: Personnes::class, inversedBy: 'evenements')]
-    #[Assert\NotBlank(message: "Veuillez choisir un remplacant ou annuler")]
+    // #[Assert\NotBlank(message: "Veuillez choisir un remplacant ou annuler")]
     private ?Personnes $personnes;
 
     #[ORM\OneToMany(mappedBy: 'evenements', targetEntity: Inscription::class)]
