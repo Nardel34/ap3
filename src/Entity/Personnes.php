@@ -173,7 +173,7 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password, UserPasswordHasherInterface $hasher): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
