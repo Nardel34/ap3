@@ -110,25 +110,6 @@ class EvenementController extends AbstractController
         ]);
     }
 
-    #[Route('/log/type/professeur/{id}/edit_event', name: 'edit_event')]
-    public function edit_event($id, EvenementRepository $evenementRepository, EntityManagerInterface $em, Request $request): Response
-    {
-        $selected_event = $evenementRepository->findOneBy(['id' => $id]);
-        $form = $this->createForm(EventType::class, $selected_event);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-            $em->flush();
-
-            return $this->redirectToRoute('home');
-        }
-
-        return $this->render('evenement/edit.html.twig', [
-            'formView' => $form->createView()
-        ]);
-    }
-
     #[Route('/log/type/professeur/del_event', name: 'del_event')]
     public function del_event(EvenementRepository $evenementRepository, EntityManagerInterface $em, Request $request): Response
     {
@@ -152,11 +133,31 @@ class EvenementController extends AbstractController
         return $this->redirectToRoute('home');
     }
 
+    #[Route('/log/type/professeur/{id}/edit_event', name: 'edit_event')]
+    public function edit_event($id, EvenementRepository $evenementRepository, EntityManagerInterface $em, Request $request): Response
+    {
+        $selected_event = $evenementRepository->findOneBy(['id' => $id]);
+        $form = $this->createForm(EventType::class, $selected_event, ['user' => $this->getUser()])->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $selected_event->setPersonnes($this->getUser());
+            $em->flush();
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('evenement/edit.html.twig', [
+            'formView' => $form->createView()
+        ]);
+    }
+
     #[Route('/log/type/professeur/{id}/remplacement', name: 'remplacement')]
     public function remplacement($id, EvenementRepository $evenementRepository, EntityManagerInterface $em, Request $request): Response
     {
         $selected_event = $evenementRepository->findOneBy(['id' => $id]);
-        $form = $this->createForm(EventType::class, $selected_event, ['user' => $this->getUser()])->handleRequest($request);
+        $form = $this->createForm(EventType::class, $selected_event, ['user' => $this->getUser()]);
+
+        $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
             $em->flush();

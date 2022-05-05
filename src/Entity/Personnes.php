@@ -49,7 +49,7 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email;
 
     #[ORM\Column(type: 'json')]
-    #[Groups(['read:User'])]
+    #[Groups(['read:User', 'write:User'])]
     private ?array $roles = [];
 
     #[ORM\Column(type: 'string')]
@@ -87,6 +87,7 @@ class Personnes implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $expPro;
 
     #[ORM\ManyToOne(targetEntity: Tarifs::class, inversedBy: 'personnes')]
+    #[Groups(['write:User'])]
     private ?Tarifs $tarifs;
 
     #[ORM\OneToMany(mappedBy: 'personnes', targetEntity: Evenement::class)]
