@@ -93,7 +93,7 @@ h1::after {
     display: none;
     height: 5px;
     width: 100%;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     animation: load 1s;
