@@ -34,28 +34,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/api/login', name: 'api_login', methods: ['POST', 'GET'])]
-    public function apiLogin(PersonnesRepository $personnesRepository, UserPasswordHasherInterface $hasher)
-    {
-        if (!empty($_POST['email']) && !empty($_POST['password'])) {
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-                $userFind = $personnesRepository->findOneBy(['email' => $email]);
-
-                if ($hasher->isPasswordValid($userFind, $password)) {
-                    return $this->json([
-                        'id' => $userFind->getId(),
-                        'email' => $userFind->getEmail(),
-                        'nom' => $userFind->getNom(),
-                        'prenom' => $userFind->getPrenom(),
-                        'roles' => $userFind->getRoles()
-                    ]);
-                }
-            }
-        }
-    }
 
     #[Route('/logout', name: 'security_logout')]
     public function logout()
