@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\EvenementRepository;
+use App\Repository\InscriptionRepository;
 use App\Repository\PersonnesRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -46,6 +47,27 @@ class ApiController extends AbstractController
             $false_entity['type'] = $item->getType()->getNomType();
             $false_entity['lieu'] = $item->getLieu()->getAdresseLieu();
             $false_entity['date'] = date_format($item->getDateEvent(), "d/m/Y");
+
+            array_push($events, $false_entity);
+        }
+
+        return $this->json([
+            'events' => $events
+        ]);
+    }
+
+    #[Route('/api/registration/{id}', name: 'eventuserapi')]
+    public function registrationapi($id, InscriptionRepository $inscriptionRepository)
+    {
+        $registerfind = $inscriptionRepository->findBy(['eleves' => $id]);
+
+        $events = [];
+
+        foreach ($registerfind as $item) {
+            $false_entity = [];
+            $false_entity['type'] = $item->getEvenements()->getType()->getNomType();
+            $false_entity['lieu'] = $item->getEvenements()->getLieu()->getAdresseLieu();
+            $false_entity['date'] = date_format($item->getEvenements()->getDateEvent(), "d/m/Y");
 
             array_push($events, $false_entity);
         }
