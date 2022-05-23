@@ -21,12 +21,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: PersonnesRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'me' => [
-            'pagination_enabled' => false,
-            'path' => '/me',
-            'method' => 'get',
-            'controller' => MeController::class,
-        ],
         'create' => [
             'path' => '/create',
             'method' => 'post',

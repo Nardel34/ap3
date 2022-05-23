@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Repository\EvenementRepository;
 use App\Repository\InscriptionRepository;
 use App\Repository\PersonnesRepository;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -35,7 +34,7 @@ class ApiController extends AbstractController
         }
     }
 
-    #[Route('/api/eventuser/{id}', name: 'eventuserapi')]
+    #[Route('/api/eventuser/{id}', name: 'eventuserapi', methods: ['GET'])]
     public function eventuserapi($id, EvenementRepository $evenementRepository)
     {
         $eventfind = $evenementRepository->findBy(['personnes' => $id]);
@@ -56,7 +55,7 @@ class ApiController extends AbstractController
         ]);
     }
 
-    #[Route('/api/registration/{id}', name: 'eventuserapi')]
+    #[Route('/api/registration/{id}', name: 'registeruserapi')]
     public function registrationapi($id, InscriptionRepository $inscriptionRepository)
     {
         $registerfind = $inscriptionRepository->findBy(['eleves' => $id]);

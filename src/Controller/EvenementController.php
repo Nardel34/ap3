@@ -1,10 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Controller;
 
-use App\Entity\Absence;
 use App\Form\EventType;
 use App\Entity\Evenement;
 use App\Entity\Inscription;
@@ -23,6 +20,7 @@ class EvenementController extends AbstractController
     public function type(TypeRepository $typeRepository): Response
     {
         $types = $typeRepository->findAll();
+
         return $this->render('evenement/type.html.twig', [
             'types' => $types
         ]);
